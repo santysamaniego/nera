@@ -1,0 +1,6 @@
+{
+  "name": "NERA — Fait Notable",
+  "description": "Boutique de moda femenina con diseño minimalista, siluetas contemporáneas y piezas de sastrería exclusivas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
