@@ -24,7 +24,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
           {/* Subtitle from Client Sketch: 'FAIT NOTABLE' */}
           <div className="mt-2.5 md:mt-3 flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#a1a1aa]">
             <span className="h-[1px] w-6 sm:w-16 bg-[#33333a]"></span>
-            <span className="text-[#f4f4f5] font-medium tracking-[0.35em]">FAIT NOTABLE</span>
+            <span className="text-[#f4f4f5] font-medium tracking-[0.35em]">FATTI NOTARE</span>
             <span className="text-[#781428] font-bold">·</span>
             <span className="text-[#8e8e99] hidden xs:inline">COLLECTION AUTOMNE / HIVER</span>
             <span className="h-[1px] w-6 sm:w-16 bg-[#33333a]"></span>
@@ -43,7 +43,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
         <div className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9] w-full max-h-[560px] overflow-hidden bg-[#121215]">
           <img
             src={heroImg}
-            alt="NERA Editorial Campaign - High Fashion Minimalist Silhouette"
+            alt="../assets/images/7_1.jpeg"
             className="w-full h-full object-cover object-top sm:object-center filter grayscale contrast-105 group-hover:scale-102 transition-transform duration-1000 ease-out"
             referrerPolicy="no-referrer"
           />
