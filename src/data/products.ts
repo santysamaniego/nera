@@ -1,6 +1,6 @@
 import { Product } from '../types';
 
-import heroImg from '../assets/images/hero_fashion_editorial_1790538129249.jpg';
+import heroImg from '../assets/images/7_1.jpeg';
 import arribaImg from '../assets/images/category_arriba_editorial_1790538139903.jpg';
 import abajoImg from '../assets/images/category_abajo_editorial_1790538149364.jpg';
 import nocheImg from '../assets/images/category_noche_editorial_1790538157865.jpg';
