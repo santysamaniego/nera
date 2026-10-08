@@ -100,7 +100,7 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
               </div>
 
               {/* Gradient Scrim */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 group-hover:from-black/95 transition-all duration-500" />
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 group-hover:from-black/95 transition-all duration-500" /> */}
 
               {/* Category Typography */}
               <div className="absolute inset-x-2 sm:inset-x-4 bottom-5 sm:bottom-8 flex flex-col items-center text-center">
