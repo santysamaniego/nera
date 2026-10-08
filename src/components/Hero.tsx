@@ -23,7 +23,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
         {/* Subtitle: FAIT NOTABLE */}
         <div className="mt-4 sm:mt-6 flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[#a1a1aa]">
           <span className="h-[1px] w-6 sm:w-16 bg-[#33333a]"></span>
-          <span className="text-[#f4f4f5] font-medium tracking-[0.35em]">FAIT NOTABLE</span>
+          <span className="text-[#f4f4f5] font-medium tracking-[0.35em]">FATTI NOTARE</span>
           <span className="text-[#781428] font-bold">·</span>
           <span className="text-[#8e8e99] hidden xs:inline">COLLECTION</span>
           <span className="h-[1px] w-6 sm:w-16 bg-[#33333a]"></span>
