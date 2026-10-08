@@ -102,49 +102,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             - CAMBIOS
           </button>
         </nav>
-
-        {/* Right: User Profile & Redesigned Luxury Shopping Bag */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          <button
-            onClick={onOpenProfile}
-            className="p-2 text-[#a1a1aa] hover:text-white transition-colors rounded-full hover:bg-[#1a1a1e] relative focus:outline-none cursor-pointer"
-            title="Mi Cuenta NERA"
-            aria-label="Mi Cuenta"
-          >
-            <User className="w-4 h-4 stroke-[1.5]" />
-            {wishlistCount > 0 && (
-              <span className="absolute 1 top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#781428]" />
-            )}
-          </button>
-
-          {/* Elegant Luxury Bag Button (Replacing technical brackets) */}
-          <button
-            onClick={onOpenCart}
-            className="group flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-transparent hover:bg-[#18181c] border border-[#2b2b32] hover:border-[#781428] text-white transition-all cursor-pointer"
-            aria-label={`Bolsa de compras con ${cartCount} prendas`}
-          >
-            {/* Custom Luxury Minimalist Tote Bag SVG */}
-            <svg
-              className="w-3.5 h-3.5 text-[#d4d4d8] group-hover:text-white transition-colors"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-            <span className="text-xs uppercase tracking-[0.15em] font-medium text-[#e4e4e7] group-hover:text-white">
-              Bolsa
-            </span>
-            <span className="text-[11px] font-mono text-[#e18092] font-semibold">
-              ({cartCount})
-            </span>
-          </button>
-        </div>
       </div>
 
       {/* Mobile secondary links strip */}
