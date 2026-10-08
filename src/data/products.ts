@@ -1,13 +1,8 @@
 import { Product } from '../types';
 
-import arribaImg from '../assets/images/category_arriba_editorial_1790538139903.jpg';
-import abajoImg from '../assets/images/category_abajo_editorial_1790538149364.jpg';
-import nocheImg from '../assets/images/category_noche_editorial_1790538157865.jpg';
-
-import prodJeans from '../assets/images/prod_jeans_wide_1790538220743.jpg';
-import prodVestido from '../assets/images/prod_vestido_seda_1790538230460.jpg';
-import prodRemera from '../assets/images/prod_remera_box_1790538252589.jpg';
-import prodPollera from '../assets/images/prod_pollera_midi_1790538271040.jpg';
+import arribaImg from '../assets/images/superior.jpg';
+import abajoImg from '../assets/images/inferior.jpg';
+import nocheImg from '../assets/images/noche.jpg';
 
 export { arribaImg, abajoImg, nocheImg };
 
