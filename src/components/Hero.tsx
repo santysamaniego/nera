@@ -31,9 +31,6 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
 
         {/* Minimalist Categories Statement & Explore Action */}
         <div className="mt-8 sm:mt-10 flex flex-col items-center gap-4">
-          <p className="text-[#71717a] text-xs uppercase tracking-[0.25em] font-mono">
-            INFERIOR · SUPERIOR · NOCHE
-          </p>
 
           <button
             onClick={onExploreClick}
