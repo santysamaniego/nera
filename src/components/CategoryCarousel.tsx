@@ -26,12 +26,12 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
   };
 
   return (
-    <section id="categorias-section" className="py-8 md:py-12 px-4 md:px-8 max-w-[1440px] mx-auto">
-      {/* Category Header with Navigation Arrows */}
-      <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#1f1f24]">
+    <section id="categorias-section" className="py-6 sm:py-10 px-4 md:px-8 max-w-[1440px] mx-auto">
+      {/* Category Header */}
+      <div className="flex items-center justify-between mb-5 sm:mb-7 pb-3 border-b border-[#1f1f24]">
         <div>
           <span className="text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#71717a] font-medium block mb-0.5">
-            Colección
+            Líneas de Colección
           </span>
           <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-tight text-white">
             CATEGORÍAS
@@ -68,7 +68,7 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
         </div>
       </div>
 
-      {/* Stadium Arch Capsules Grid/Carousel: On Mobile shows 2 per view (compact), on desktop smooth carousel */}
+      {/* Stadium Arch Capsules Grid: Responsive for 3 Categories (INFERIOR, SUPERIOR, NOCHE) */}
       <div
         ref={scrollContainerRef}
         className="flex items-center gap-3 sm:gap-6 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory focus:outline-none"
@@ -83,7 +83,7 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
               onClick={() => onSelectCategory(cat.id)}
               whileHover={{ y: -4 }}
               whileTap={{ scale: 0.98 }}
-              className={`group relative flex-shrink-0 snap-start text-left cursor-pointer overflow-hidden transition-all duration-300 w-[calc(50%-6px)] sm:w-[220px] md:w-[260px] lg:w-[280px] h-[220px] sm:h-[340px] md:h-[420px] rounded-[60px] sm:rounded-[110px] md:rounded-[140px] ${
+              className={`group relative flex-shrink-0 snap-start text-left cursor-pointer overflow-hidden transition-all duration-300 w-[calc(50%-6px)] sm:w-[220px] md:w-[280px] lg:flex-1 h-[210px] sm:h-[320px] md:h-[380px] rounded-[55px] sm:rounded-[110px] md:rounded-[130px] ${
                 isActive
                   ? 'ring-2 ring-[#781428]'
                   : 'hover:opacity-95'
@@ -99,12 +99,12 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
                 />
               </div>
 
-              {/* Gradient Scrim for Legibility */}
+              {/* Gradient Scrim */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 group-hover:from-black/95 transition-all duration-500" />
 
-              {/* Bottom Category Typography */}
+              {/* Category Typography */}
               <div className="absolute inset-x-2 sm:inset-x-4 bottom-5 sm:bottom-8 flex flex-col items-center text-center">
-                <h3 className="font-display text-base sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wider text-white mb-1 drop-shadow-sm group-hover:tracking-[0.18em] transition-all duration-300">
+                <h3 className="font-display text-base sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wider text-white mb-0.5 sm:mb-1 drop-shadow-sm group-hover:tracking-[0.18em] transition-all duration-300">
                   {cat.title}
                 </h3>
 

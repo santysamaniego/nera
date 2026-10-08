@@ -1,13 +1,13 @@
 import React from 'react';
-import { Ruler, RotateCcw, Check, ChevronDown } from 'lucide-react';
-import { MainCategory, SubCategory, ClothingSize } from '../types';
+import { Ruler, RotateCcw, ChevronDown } from 'lucide-react';
+import { MainCategory } from '../types';
 
 interface FilterBarProps {
   activeCategory: MainCategory;
-  selectedSubCategory: SubCategory | 'ALL';
-  onSelectSubCategory: (sub: SubCategory | 'ALL') => void;
-  selectedSize: ClothingSize | 'ALL';
-  onSelectSize: (size: ClothingSize | 'ALL') => void;
+  selectedSubCategory: string | 'ALL';
+  onSelectSubCategory: (sub: string | 'ALL') => void;
+  selectedSize: string | 'ALL';
+  onSelectSize: (size: string | 'ALL') => void;
   selectedColorTone: string | 'ALL';
   onSelectColorTone: (color: string | 'ALL') => void;
   sortBy: 'featured' | 'price-asc' | 'price-desc' | 'new';
@@ -23,64 +23,39 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onSelectSubCategory,
   selectedSize,
   onSelectSize,
-  selectedColorTone,
-  onSelectColorTone,
   sortBy,
   onSelectSortBy,
   onOpenSizeGuide,
   totalProductsCount,
   onResetFilters,
 }) => {
-  const getSubcategories = (): SubCategory[] => {
+  const getSubcategories = (): string[] => {
     switch (activeCategory) {
-      case 'ARRIBA':
-        return ['Remeras', 'Tops', 'Bodys', 'Remerones', 'Buzos', 'Camperas', 'Blazers'];
-      case 'ABAJO':
-        return ['Jeans', 'Joggings', 'Polleras', 'Shorts'];
+      case 'INFERIOR':
+        return ['Jeans', 'Minis'];
+      case 'SUPERIOR':
+        return ['Remeras', 'Blusas', 'Tops'];
       case 'NOCHE':
-        return ['Vestidos', 'Tops', 'Bodys', 'Polleras', 'Shorts', 'Conjuntos'];
-      case 'ACCESORIOS':
-        return ['Carteras', 'Cintos', 'Gorras', 'Sombreros', 'Joyería'];
+        return ['Vestidos', 'Tops', 'Shorts'];
       default:
-        return [
-          'Blazers',
-          'Remeras',
-          'Jeans',
-          'Vestidos',
-          'Tops',
-          'Buzos',
-          'Carteras',
-          'Polleras',
-          'Cintos',
-        ];
+        return ['Jeans', 'Minis', 'Remeras', 'Blusas', 'Vestidos', 'Tops', 'Shorts'];
     }
   };
 
-  const availableSizes: ClothingSize[] =
-    activeCategory === 'ABAJO'
-      ? ['24', '26', '28', '30', '32', '34']
-      : activeCategory === 'ACCESORIOS'
-      ? ['Único', 'S', 'M', 'L']
-      : ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  const availableSizes: string[] =
+    activeCategory === 'INFERIOR'
+      ? ['36', '38', '40', 'S', 'M', 'L']
+      : ['S', 'M', 'L', 'XL'];
 
-  const colorTones = [
-    { name: 'Negro', hex: '#141416' },
-    { name: 'Gris Oscuro', hex: '#383840' },
-    { name: 'Gris Claro', hex: '#888894' },
-    { name: 'Blanco / Crudo', hex: '#f4f4f2' },
-    { name: 'Borgoña / Vino', hex: '#781428' },
-  ];
-
-  const hasActiveFilters =
-    selectedSubCategory !== 'ALL' || selectedSize !== 'ALL' || selectedColorTone !== 'ALL';
+  const hasActiveFilters = selectedSubCategory !== 'ALL' || selectedSize !== 'ALL';
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pt-4 pb-8">
+    <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pt-4 pb-6 sm:pb-8">
       {/* Category Section Header & Sorting */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-[#202026]">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 pb-4 border-b border-[#202026]">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.28em] text-[#71717a] font-medium mb-1">
-            Catálogo
+          <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.28em] text-[#71717a] font-medium mb-1">
+            Prendas Seleccionadas
           </div>
           <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight text-white flex items-baseline gap-3">
             <span>{activeCategory === 'ALL' ? 'Colección Completa' : activeCategory}</span>
@@ -91,7 +66,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         {/* Actions: Size Guide & Minimalist Sort */}
-        <div className="flex items-center gap-4 text-xs">
+        <div className="flex items-center gap-3 sm:gap-4 text-xs">
           <button
             onClick={onOpenSizeGuide}
             className="flex items-center gap-1.5 text-[#d4d4d8] hover:text-white transition-colors cursor-pointer py-1"
@@ -113,7 +88,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <option value="featured" className="bg-[#141418] text-white">Destacados</option>
               <option value="price-asc" className="bg-[#141418] text-white">Menor precio</option>
               <option value="price-desc" className="bg-[#141418] text-white">Mayor precio</option>
-              <option value="new" className="bg-[#141418] text-white">Lanzamientos</option>
             </select>
             <ChevronDown className="w-3 h-3 text-[#71717a] pointer-events-none absolute right-0" />
           </div>
@@ -133,11 +107,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
       </div>
 
-      {/* Row 1: Subcategories - Clean Minimalist Text Tabs with Underline */}
-      <div className="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-[#1c1c22]">
+      {/* Row 1: Subcategories Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto py-3 sm:py-4 scrollbar-none border-b border-[#1c1c22]">
         <button
           onClick={() => onSelectSubCategory('ALL')}
-          className={`px-4 py-1.5 text-xs uppercase tracking-wider rounded-full transition-all shrink-0 cursor-pointer ${
+          className={`px-3.5 py-1.5 text-xs uppercase tracking-wider rounded-full transition-all shrink-0 cursor-pointer ${
             selectedSubCategory === 'ALL'
               ? 'bg-white text-black font-semibold shadow-sm'
               : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
@@ -151,7 +125,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <button
               key={sub}
               onClick={() => onSelectSubCategory(sub)}
-              className={`px-4 py-1.5 text-xs uppercase tracking-wider rounded-full transition-all shrink-0 cursor-pointer ${
+              className={`px-3.5 py-1.5 text-xs uppercase tracking-wider rounded-full transition-all shrink-0 cursor-pointer ${
                 isSubActive
                   ? 'bg-white text-black font-semibold shadow-sm'
                   : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
@@ -163,81 +137,38 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         })}
       </div>
 
-      {/* Row 2: Subtle Talles & Tonos Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs">
-        {/* Talles */}
-        <div className="flex items-center gap-3">
-          <span className="text-[#71717a] uppercase tracking-wider text-[11px] font-medium">
-            Talles:
-          </span>
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => onSelectSize('ALL')}
-              className={`px-3 py-1 text-xs rounded-full transition-colors cursor-pointer ${
-                selectedSize === 'ALL'
-                  ? 'bg-[#781428] text-white font-medium'
-                  : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
-              }`}
-            >
-              Todos
-            </button>
-            {availableSizes.map((size) => {
-              const isSizeActive = selectedSize === size;
-              return (
-                <button
-                  key={size}
-                  onClick={() => onSelectSize(size)}
-                  className={`min-w-[34px] h-7 px-2 text-xs rounded-full transition-colors cursor-pointer ${
-                    isSizeActive
-                      ? 'bg-[#781428] text-white font-semibold'
-                      : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
-                  }`}
-                >
-                  {size}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Tonos */}
-        <div className="flex items-center gap-3">
-          <span className="text-[#71717a] uppercase tracking-wider text-[11px] font-medium">
-            Tono:
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => onSelectColorTone('ALL')}
-              className={`text-xs px-2 py-0.5 rounded transition-colors ${
-                selectedColorTone === 'ALL'
-                  ? 'text-white font-medium'
-                  : 'text-[#71717a] hover:text-white'
-              }`}
-            >
-              Todos
-            </button>
-            {colorTones.map((c) => (
+      {/* Row 2: Talles Bar */}
+      <div className="flex items-center gap-3 pt-3.5 text-xs overflow-x-auto scrollbar-none">
+        <span className="text-[#71717a] uppercase tracking-wider text-[11px] font-medium shrink-0">
+          Filtrar por Talle:
+        </span>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => onSelectSize('ALL')}
+            className={`px-3 py-1 text-xs rounded-full transition-colors cursor-pointer shrink-0 ${
+              selectedSize === 'ALL'
+                ? 'bg-[#781428] text-white font-medium'
+                : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
+            }`}
+          >
+            Todos
+          </button>
+          {availableSizes.map((size) => {
+            const isSizeActive = selectedSize === size;
+            return (
               <button
-                key={c.name}
-                onClick={() => onSelectColorTone(selectedColorTone === c.name ? 'ALL' : c.name)}
-                title={c.name}
-                className={`w-4 h-4 rounded-full transition-all cursor-pointer flex items-center justify-center ${
-                  selectedColorTone === c.name
-                    ? 'ring-2 ring-white scale-110 shadow-sm'
-                    : 'opacity-70 hover:opacity-100 hover:scale-105'
+                key={size}
+                onClick={() => onSelectSize(size)}
+                className={`min-w-[32px] h-7 px-2 text-xs rounded-full transition-colors cursor-pointer shrink-0 ${
+                  isSizeActive
+                    ? 'bg-[#781428] text-white font-semibold'
+                    : 'text-[#a1a1aa] hover:text-white hover:bg-[#18181d]'
                 }`}
-                style={{ backgroundColor: c.hex }}
               >
-                {selectedColorTone === c.name && (
-                  <Check
-                    className={`w-2.5 h-2.5 ${
-                      c.name.includes('Blanco') ? 'text-black' : 'text-white'
-                    }`}
-                  />
-                )}
+                {size}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

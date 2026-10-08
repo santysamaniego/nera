@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { X, Ruler, Plus, Minus, ShoppingBag, Heart, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
-import { Product, ClothingSize } from '../types';
+import React, { useState, useEffect } from 'react';
+import { X, Ruler, MessageCircle, Truck, RefreshCw } from 'lucide-react';
+import { Product } from '../types';
+import { WHATSAPP_NUMBER } from '../data/products';
 
 interface ProductDetailModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (product: Product, size: ClothingSize, color: string, quantity: number) => void;
+  onAddToCart?: (product: Product, size: string, color: string, quantity: number) => void;
   onOpenSizeGuide: () => void;
   isWishlisted: boolean;
   onToggleWishlist: (product: Product) => void;
@@ -16,29 +17,42 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   product,
   isOpen,
   onClose,
-  onAddToCart,
   onOpenSizeGuide,
-  isWishlisted,
-  onToggleWishlist,
 }) => {
   if (!isOpen || !product) return null;
 
-  const [selectedSize, setSelectedSize] = useState<ClothingSize>(product.sizes[0]);
-  const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]?.name || 'Nero');
-  const [selectedImage, setSelectedImage] = useState<string>(product.image);
-  const [quantity, setQuantity] = useState<number>(1);
-  const [addedSuccess, setAddedSuccess] = useState<boolean>(false);
+  const [selectedSize, setSelectedSize] = useState<string>(product.sizes[0] || '');
+  const [selectedColor, setSelectedColor] = useState<string>(
+    product.colors && product.colors.length > 0 ? product.colors[0].name : ''
+  );
 
-  const availableStock = product.stockPerSize[selectedSize] ?? 4;
+  // Active images based on chosen color
+  const activeImages: string[] = React.useMemo(() => {
+    if (product.colors && product.colors.length > 0 && selectedColor) {
+      const match = product.colors.find((c) => c.name === selectedColor);
+      if (match && match.images && match.images.length > 0) {
+        return match.images;
+      }
+    }
+    return product.images && product.images.length > 0 ? product.images : [product.image];
+  }, [product, selectedColor]);
 
-  const handleAdd = () => {
-    onAddToCart(product, selectedSize, selectedColor, quantity);
-    setAddedSuccess(true);
-    setTimeout(() => {
-      setAddedSuccess(false);
-      onClose();
-    }, 1200);
-  };
+  const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
+  const [imgError, setImgError] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    setActiveImageIdx(0);
+    setSelectedSize(product.sizes[0] || '');
+    if (product.colors && product.colors.length > 0) {
+      setSelectedColor(product.colors[0].name);
+    } else {
+      setSelectedColor('');
+    }
+  }, [product]);
+
+  const currentImgSrc = activeImages[activeImageIdx] || product.image;
+  const isFailed = imgError[currentImgSrc];
+  const finalImgSrc = isFailed && product.fallbackImage ? product.fallbackImage : currentImgSrc;
 
   const formattedPrice = new Intl.NumberFormat('es-AR', {
     style: 'currency',
@@ -46,232 +60,164 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     maximumFractionDigits: 0,
   }).format(product.price);
 
+  const whatsappMessage = encodeURIComponent(
+    `Hola NERA! Quiero consultar por ${product.name} ($${product.price.toLocaleString('es-AR')})` +
+      (selectedSize ? ` en talle ${selectedSize}` : '') +
+      (selectedColor ? ` color ${selectedColor}` : '')
+  );
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl animate-fade-in">
-      <div className="relative w-full max-w-4xl bg-[#141417] border border-[#2b2b32] rounded-2xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col md:flex-row">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-2xl animate-fade-in">
+      <div className="relative w-full max-w-3xl bg-[#0c0c0f] border border-white/[0.08] rounded-[24px] sm:rounded-[32px] shadow-[0_25px_80px_rgba(0,0,0,0.85)] overflow-hidden max-h-[92vh] flex flex-col md:flex-row">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/60 backdrop-blur-md text-[#d4d4d8] hover:text-white transition-colors cursor-pointer"
-          aria-label="Cerrar ventana de detalles"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          aria-label="Cerrar ventana"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 stroke-[1.5]" />
         </button>
 
         {/* Left Column: Image Gallery */}
-        <div className="md:w-1/2 bg-[#18181c] relative flex flex-col justify-between overflow-hidden">
-          <div className="relative aspect-[3/4] w-full max-h-[480px] md:max-h-none overflow-hidden">
+        <div className="md:w-1/2 bg-[#121215] relative flex flex-col justify-between overflow-hidden">
+          <div className="relative aspect-[3/4] w-full max-h-[380px] md:max-h-none overflow-hidden bg-[#161619]">
             <img
-              src={selectedImage}
+              src={finalImgSrc}
               alt={product.name}
-              className="w-full h-full object-cover object-center filter grayscale-[10%] contrast-105"
+              onError={() => setImgError((prev) => ({ ...prev, [currentImgSrc]: true }))}
+              className="w-full h-full object-cover object-center filter grayscale-[5%] contrast-105"
               referrerPolicy="no-referrer"
             />
           </div>
 
-          {/* Alternate thumbnails */}
-          {product.secondaryImage && (
-            <div className="p-3 bg-[#111114] border-t border-[#232328] flex items-center gap-2">
-              <button
-                onClick={() => setSelectedImage(product.image)}
-                className={`w-14 h-16 rounded overflow-hidden border-2 transition-all cursor-pointer ${
-                  selectedImage === product.image ? 'border-[#781428]' : 'border-transparent opacity-60'
-                }`}
-              >
-                <img src={product.image} alt="Vista 1" className="w-full h-full object-cover" />
-              </button>
-              <button
-                onClick={() => setSelectedImage(product.secondaryImage!)}
-                className={`w-14 h-16 rounded overflow-hidden border-2 transition-all cursor-pointer ${
-                  selectedImage === product.secondaryImage
-                    ? 'border-[#781428]'
-                    : 'border-transparent opacity-60'
-                }`}
-              >
-                <img
-                  src={product.secondaryImage}
-                  alt="Vista 2"
-                  className="w-full h-full object-cover"
-                />
-              </button>
+          {/* Thumbnails if multiple images */}
+          {activeImages.length > 1 && (
+            <div className="p-3 bg-[#0e0e12] border-t border-white/[0.06] flex items-center gap-2 overflow-x-auto scrollbar-none">
+              {activeImages.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImageIdx(i)}
+                  className={`w-12 h-14 rounded-lg overflow-hidden border transition-all cursor-pointer shrink-0 ${
+                    activeImageIdx === i ? 'border-[#781428] ring-1 ring-[#781428]' : 'border-white/10 opacity-60'
+                  }`}
+                >
+                  <img
+                    src={imgError[img] && product.fallbackImage ? product.fallbackImage : img}
+                    alt={`Vista ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Right Column: Product Configurator & Purchasing */}
-        <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[85vh] bg-[#141417]">
-          <div className="space-y-5">
+        {/* Right Column: Details & WhatsApp Action */}
+        <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[85vh] bg-[#0c0c0f]">
+          <div className="space-y-4 sm:space-y-5">
             {/* Header info */}
             <div>
-              <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#71717a] mb-1">
-                NERA · {product.category} · {product.subcategory}
+              <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#71717a] mb-1">
+                NERA · {product.category} {product.subcategory ? `· ${product.subcategory}` : ''}
               </div>
-              <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight leading-snug">
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug font-display">
                 {product.name}
               </h2>
-              <div className="mt-2 font-mono text-xl font-bold text-white tabular-nums flex items-baseline gap-2">
-                <span>{formattedPrice}</span>
-                <span className="text-xs font-normal text-[#9a1e36]">
-                  (15% OFF con transferencia: {new Intl.NumberFormat('es-AR', {
-                    style: 'currency',
-                    currency: 'ARS',
-                    maximumFractionDigits: 0,
-                  }).format(product.price * 0.85)})
-                </span>
+              <div className="mt-2 font-mono text-lg sm:text-xl font-bold text-white tabular-nums">
+                {formattedPrice}
               </div>
             </div>
 
             {/* Description */}
-            <p className="text-xs text-[#a1a1aa] leading-relaxed">
-              {product.description}
-            </p>
+            {product.description && (
+              <p className="text-xs text-[#8e8e99] leading-relaxed font-light">
+                {product.description}
+              </p>
+            )}
 
             {/* Color Selector */}
-            <div>
-              <label className="block text-xs font-mono uppercase text-[#d4d4d8] mb-2">
-                Tono: <strong className="text-white">{selectedColor}</strong>
-              </label>
-              <div className="flex items-center gap-2">
-                {product.colors.map((c) => (
-                  <button
-                    key={c.name}
-                    onClick={() => setSelectedColor(c.name)}
-                    title={c.name}
-                    className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
-                      selectedColor === c.name
-                        ? 'ring-2 ring-[#781428] border-white scale-110'
-                        : 'border-[#3f3f46] hover:scale-105'
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                  />
-                ))}
+            {product.colors && product.colors.length > 0 && (
+              <div>
+                <label className="block text-[11px] font-mono uppercase text-[#d4d4d8] mb-1.5">
+                  Color Seleccionado: <strong className="text-white">{selectedColor}</strong>
+                </label>
+                <div className="flex items-center gap-2">
+                  {product.colors.map((c) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedColor(c.name)}
+                      className={`text-xs px-3 py-1 rounded-full border transition-all cursor-pointer font-mono ${
+                        selectedColor === c.name
+                          ? 'border-[#781428] bg-[#781428]/30 text-white font-medium ring-1 ring-[#781428]'
+                          : 'border-white/10 text-[#a1a1aa] hover:border-white/30'
+                      }`}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Size Selector - Requested prominent placement */}
+            {/* Size Selector */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-mono uppercase text-[#d4d4d8]">
-                  Talle Seleccionado: <strong className="text-[#e18092]">{selectedSize}</strong>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-[11px] font-mono uppercase text-[#d4d4d8]">
+                  Talle: <strong className="text-white">{selectedSize}</strong>
                 </label>
                 <button
                   type="button"
                   onClick={onOpenSizeGuide}
-                  className="flex items-center gap-1 text-[11px] text-[#a1a1aa] hover:text-white underline cursor-pointer"
+                  className="flex items-center gap-1 text-[10px] text-[#a1a1aa] hover:text-white underline cursor-pointer"
                 >
                   <Ruler className="w-3 h-3 text-[#781428]" />
-                  <span>Ver medidas en cm</span>
+                  <span>Tabla de talles</span>
                 </button>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {product.sizes.map((sz) => {
-                  const isSzActive = selectedSize === sz;
-                  const stock = product.stockPerSize[sz] ?? 3;
-                  return (
-                    <button
-                      key={sz}
-                      onClick={() => setSelectedSize(sz)}
-                      className={`min-w-[42px] h-9 px-3 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
-                        isSzActive
-                          ? 'bg-[#781428] text-white ring-2 ring-[#9a1e36] font-bold'
-                          : 'bg-[#1b1b20] text-[#d4d4d8] hover:text-white border border-[#2b2b32] hover:border-[#52525c]'
-                      }`}
-                    >
-                      {sz}
-                    </button>
-                  );
-                })}
+                {product.sizes.map((sz) => (
+                  <button
+                    key={sz}
+                    onClick={() => setSelectedSize(sz)}
+                    className={`min-w-[42px] h-9 px-3 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                      selectedSize === sz
+                        ? 'bg-white text-black font-bold'
+                        : 'bg-white/[0.04] text-[#d4d4d8] hover:text-white border border-white/[0.08]'
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                ))}
               </div>
+            </div>
 
-              <p className="mt-2 text-[11px] font-mono text-[#71717a]">
-                Disponibilidad: <span className="text-[#a1a1aa] font-medium">{availableStock} unidades en stock</span>
+            {/* WhatsApp CTA Action */}
+            <div className="pt-2">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-[#0b140e] text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-[#25D366]/20 cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>Consultar por WhatsApp</span>
+              </a>
+              <p className="mt-2 text-[10px] text-center text-[#71717a] font-mono">
+                Atención directa NERA Atelier · 11 3658-1397
               </p>
             </div>
 
-            {/* Quantity Stepper & Add to Bag */}
-            <div className="pt-2">
-              <div className="flex items-center gap-3">
-                {/* Quantity */}
-                <div className="flex items-center bg-[#1b1b20] border border-[#2d2d35] rounded-lg">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-2.5 text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
-                    aria-label="Disminuir cantidad"
-                  >
-                    <Minus className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="w-8 text-center text-xs font-mono font-semibold text-white">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(Math.min(availableStock, quantity + 1))}
-                    className="p-2.5 text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
-                    aria-label="Aumentar cantidad"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Primary Add CTA */}
-                <button
-                  onClick={handleAdd}
-                  disabled={addedSuccess}
-                  className={`flex-1 py-3 px-4 rounded-lg text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                    addedSuccess
-                      ? 'bg-[#1b3b24] text-[#4ade80] border border-[#286337]'
-                      : 'bg-[#781428] hover:bg-[#941b32] text-white shadow-lg hover:shadow-[#781428]/30'
-                  }`}
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>
-                    {addedSuccess
-                      ? '¡Agregado a la Bolsa!'
-                      : `Comprar · ${new Intl.NumberFormat('es-AR', {
-                          style: 'currency',
-                          currency: 'ARS',
-                          maximumFractionDigits: 0,
-                        }).format(product.price * quantity)}`}
-                  </span>
-                </button>
-
-                {/* Wishlist toggle */}
-                <button
-                  onClick={() => onToggleWishlist(product)}
-                  className="p-3 rounded-lg bg-[#1b1b20] border border-[#2d2d35] hover:border-[#781428] text-white transition-colors cursor-pointer"
-                  title="Guardar en favoritos"
-                >
-                  <Heart
-                    className={`w-4 h-4 ${
-                      isWishlisted ? 'fill-[#781428] text-[#781428]' : 'text-[#a1a1aa]'
-                    }`}
-                  />
-                </button>
-              </div>
-            </div>
-
-            {/* Details accordion / specifications */}
-            <div className="border-t border-[#232328] pt-4 space-y-2 text-xs">
-              <h4 className="font-semibold text-[#d4d4d8] uppercase tracking-wider text-[11px]">
-                Composición & Cuidados
-              </h4>
-              <p className="text-[#a1a1aa]">{product.composition}</p>
-              <ul className="list-disc pl-4 space-y-1 text-[#71717a] pt-1">
-                {product.details.map((d, i) => (
-                  <li key={i}>{d}</li>
-                ))}
-              </ul>
-            </div>
-
             {/* Trust markers */}
-            <div className="border-t border-[#232328] pt-4 grid grid-cols-2 gap-3 text-[11px] text-[#71717a]">
+            <div className="border-t border-white/[0.06] pt-4 grid grid-cols-2 gap-3 text-[10px] text-[#71717a]">
               <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-[#781428] shrink-0" />
-                <span>Envío seguro a todo el país</span>
+                <Truck className="w-3.5 h-3.5 text-[#781428] shrink-0" />
+                <span>Envíos a todo el país</span>
               </div>
               <div className="flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-[#781428] shrink-0" />
-                <span>Primer cambio gratis (30 días)</span>
+                <RefreshCw className="w-3.5 h-3.5 text-[#781428] shrink-0" />
+                <span>Primer cambio sin cargo</span>
               </div>
             </div>
           </div>

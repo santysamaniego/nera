@@ -20,12 +20,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   if (!isOpen) return null;
 
   const popularQueries = [
-    'Blazer oversized',
-    'Vestido noche',
-    'Jeans wide leg',
-    'Borgoña',
-    'Remera boxy',
-    'Cartera hobo',
+    'Wide',
+    'Mini',
+    'Dress',
+    'Blusa',
+    'Top',
+    'Basic',
   ];
 
   const filteredProducts = searchTerm.trim()
@@ -33,9 +33,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         (p) =>
           p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.subcategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.colors.some((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()))
+          (p.subcategory && p.subcategory.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (p.description && p.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (p.colors && p.colors.some((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase())))
       )
     : [];
 

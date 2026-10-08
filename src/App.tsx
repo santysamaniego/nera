@@ -35,13 +35,13 @@ export default function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [detailProduct, setDetailProduct] = useState<Product | null>(null);
 
-  // Cart State (Initialized with 1 sample luxury item so the user sees a living bag right away)
+  // Cart State (Initialized with 1 sample item)
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       id: 'cart-init-1',
-      product: PRODUCTS[0], // Blazer Sastreado Oversized Nero
-      selectedSize: 'M',
-      selectedColor: 'Nero Black',
+      product: PRODUCTS[0], // Wide ossido
+      selectedSize: '38',
+      selectedColor: 'Óxido',
       quantity: 1,
     },
   ]);
@@ -183,15 +183,17 @@ export default function App() {
 
     if (selectedColorTone !== 'ALL') {
       const query = selectedColorTone.toLowerCase();
-      result = result.filter((p) =>
-        p.colors.some(
-          (c) =>
-            c.name.toLowerCase().includes(query) ||
-            (query.includes('borgoña') && (c.name.toLowerCase().includes('borgoña') || c.name.toLowerCase().includes('vino'))) ||
-            (query.includes('blanco') && (c.name.toLowerCase().includes('blanco') || c.name.toLowerCase().includes('chalk') || c.name.toLowerCase().includes('crudo') || c.name.toLowerCase().includes('bone'))) ||
-            (query.includes('negro') && (c.name.toLowerCase().includes('black') || c.name.toLowerCase().includes('nero') || c.name.toLowerCase().includes('dark'))) ||
-            (query.includes('gris') && (c.name.toLowerCase().includes('grey') || c.name.toLowerCase().includes('charcoal') || c.name.toLowerCase().includes('graphite') || c.name.toLowerCase().includes('slate') || c.name.toLowerCase().includes('stone')))
-        )
+      result = result.filter(
+        (p) =>
+          p.colors &&
+          p.colors.some(
+            (c) =>
+              c.name.toLowerCase().includes(query) ||
+              (query.includes('borgoña') && (c.name.toLowerCase().includes('borgoña') || c.name.toLowerCase().includes('vino'))) ||
+              (query.includes('blanco') && (c.name.toLowerCase().includes('blanco') || c.name.toLowerCase().includes('chalk') || c.name.toLowerCase().includes('crudo') || c.name.toLowerCase().includes('bone'))) ||
+              (query.includes('negro') && (c.name.toLowerCase().includes('black') || c.name.toLowerCase().includes('nero') || c.name.toLowerCase().includes('dark'))) ||
+              (query.includes('gris') && (c.name.toLowerCase().includes('grey') || c.name.toLowerCase().includes('charcoal') || c.name.toLowerCase().includes('graphite') || c.name.toLowerCase().includes('slate') || c.name.toLowerCase().includes('stone')))
+          )
       );
     }
 
@@ -343,7 +345,7 @@ export default function App() {
         onClose={() => setIsProfileOpen(false)}
         wishlistProducts={wishlistProducts}
         onRemoveWishlist={handleToggleWishlist}
-        onQuickAddToCart={(p, sz) => handleAddToCart(p, sz, p.colors[0]?.name || 'Nero', 1)}
+        onQuickAddToCart={(p, sz) => handleAddToCart(p, sz, p.colors?.[0]?.name || 'Único', 1)}
         orders={orders}
       />
     </div>
