@@ -37,29 +37,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-[#0e0e10]/95 backdrop-blur-md border-b border-[#1f1f24] transition-all">
-      {/* Infinite Looping Marquee Ticker */}
-      <div className="bg-[#141418] py-2 border-b border-[#1c1c22] overflow-hidden whitespace-nowrap select-none">
-        <div className="animate-marquee flex items-center text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-[#a1a1aa] font-medium">
-          {/* Loop block 1 */}
-          <div className="flex items-center gap-6 pr-6">
-            {tickerItems.map((text, idx) => (
-              <React.Fragment key={`t1-${idx}`}>
-                <span>{text}</span>
-                <span className="text-[#781428] font-bold">◆</span>
-              </React.Fragment>
-            ))}
-          </div>
-          {/* Loop block 2 (duplicate for seamless loop) */}
-          <div className="flex items-center gap-6 pr-6" aria-hidden="true">
-            {tickerItems.map((text, idx) => (
-              <React.Fragment key={`t2-${idx}`}>
-                <span>{text}</span>
-                <span className="text-[#781428] font-bold">◆</span>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Main navigation row matching client sketch */}
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
