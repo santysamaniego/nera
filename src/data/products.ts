@@ -47,7 +47,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['36', '38', '40'],
     image: '/images/wide_ossido_principal.jpeg',
     images: ['/images/wide_ossido_principal.jpeg', '/images/wide_ossido_inferior.jpeg'],
-    fallbackImage: prodJeans,
     description: 'Pantalón wide leg confeccionado en denim rígido tono óxido con calce a la cintura y caída recta amplia.',
   },
 
@@ -66,7 +65,6 @@ export const PRODUCTS: Product[] = [
       '/images/wide_nuvola_inferior2.jpeg',
       '/images/wide_nuvola_inferior3.jpeg',
     ],
-    fallbackImage: prodJeans,
     description: 'Denim wide leg en lavado suave celeste nuvola con tiro medio-alto y costuras reforzadas.',
   },
 
@@ -84,7 +82,6 @@ export const PRODUCTS: Product[] = [
       '/images/wide_fiume_inferior.jpeg',
       '/images/wide_fiume_inferior2.jpeg',
     ],
-    fallbackImage: prodJeans,
     description: 'Jeans wide de lavado profundo clásico azul río con acabado artesanal y calce fluido.',
   },
 
@@ -98,7 +95,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['36', '38', '40'],
     image: '/images/wide_nera_principal.jpeg',
     images: ['/images/wide_nera_principal.jpeg', '/images/wide_nera_inferior.jpeg'],
-    fallbackImage: prodJeans,
     description: 'Pantalón wide leg negro profundo, teñido reactivo que preserva el color y textura prémium.',
   },
 
@@ -117,7 +113,6 @@ export const PRODUCTS: Product[] = [
       '/images/mini_pianto_inferior2.jpeg',
       '/images/mini_pianto_inferior3.jpeg',
     ],
-    fallbackImage: prodPollera,
     description: 'Minifalda sastrera con tablas frontales y detalle asimétrico de diseño minimalista.',
   },
 
@@ -135,7 +130,6 @@ export const PRODUCTS: Product[] = [
       '/images/mini_lotto_inferior.jpeg',
       '/images/mini_lotto_inferior2.jpeg',
     ],
-    fallbackImage: prodPollera,
     description: 'Pollera mini de corte recto al cuerpo con terminaciones ocultas y cintura limpia.',
   },
 
@@ -154,7 +148,6 @@ export const PRODUCTS: Product[] = [
       '/images/mini_moon_inferior2.jpeg',
       '/images/mini_moon_inferior3.jpeg',
     ],
-    fallbackImage: prodPollera,
     description: 'Minifalda estructurada en tejido texturado con silueta envolvente y forrería suave.',
   },
 
@@ -168,7 +161,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/mini_stella_principal.jpeg',
     images: ['/images/mini_stella_principal.jpeg', '/images/mini_stella_inferior.jpeg'],
-    fallbackImage: prodPollera,
     description: 'Falda mini entallada con destellos tenues para salidas y eventos nocturnos.',
   },
 
@@ -182,7 +174,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/dress_ginevra.jpeg',
     images: ['/images/dress_ginevra.jpeg'],
-    fallbackImage: prodVestido,
     description: 'Vestido largo de fiesta de caída etérea con escote limpio y silueta lánguida refinada.',
   },
 
@@ -219,7 +210,6 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    fallbackImage: prodVestido,
     description: 'Vestido estilo camiseta en rib premium con entalle sutil, disponible en blanco y en negro.',
   },
 
@@ -233,7 +223,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/dress_sakura_principal.jpeg',
     images: ['/images/dress_sakura_principal.jpeg', '/images/dress_sakura_noche.jpeg'],
-    fallbackImage: prodVestido,
     description: 'Vestido corto con movimiento fluido y tirantes delicados para ocasiones especiales.',
   },
 
@@ -247,7 +236,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/blusa_pois_principal.jpeg',
     images: ['/images/blusa_pois_principal.jpeg', '/images/blusa_pois_superior.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Blusa fluida con motivo sutil a lunares pois, cuello arquitectónico y manga holgada.',
   },
 
@@ -284,7 +272,6 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    fallbackImage: prodRemera,
     description: 'Remera de corte oversize holgado confeccionada en algodón pesado de máxima suavidad.',
   },
 
@@ -303,7 +290,6 @@ export const PRODUCTS: Product[] = [
       '/images/bianca_over2.jpeg',
       '/images/bianca_over3.jpeg',
     ],
-    fallbackImage: prodRemera,
     description: 'Remerón premium boxy blanco impoluto con cuello ribb reforzado y hombros caídos.',
   },
 
@@ -317,7 +303,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/basic_lore_principal.jpeg',
     images: ['/images/basic_lore_principal.jpeg', '/images/basic_lore.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Básico indispensable de calce al cuerpo con escote suave y algodón elástizado.',
   },
 
@@ -331,7 +316,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/top_angolo.jpeg',
     images: ['/images/top_angolo.jpeg', '/images/top_angolo2.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Top de noche con corte angular estructurado y diseño contemporáneo minimalista.',
   },
 
@@ -345,7 +329,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/basic_strap.jpeg',
     images: ['/images/basic_strap.jpeg', '/images/basic_strap2.jpeg', '/images/basic_strap3.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Top minimalista con finos tirantes tipo bretel y calce al cuerpo impecable.',
   },
 
@@ -382,7 +365,6 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    fallbackImage: prodRemera,
     description: 'Remera básica de corte clásico atemporal con tacto suave, disponible en blanco y negro.',
   },
 
@@ -396,7 +378,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/blusa_goccia_principal.jpeg',
     images: ['/images/blusa_goccia_principal.jpeg', '/images/blusa_goccia.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Blusa ligera con escote gota en la espalda y caída suave en crepé liviano.',
   },
 
@@ -410,7 +391,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/blusa_asia_blanca_principal.jpeg',
     images: ['/images/blusa_asia_blanca_principal.jpeg', '/images/blusa_asia.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Blusa envolvente de inspiración oriental en satén blanco suave con lazo ajustable.',
   },
 
@@ -424,7 +404,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/top_stella.jpeg',
     images: ['/images/top_stella.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Top joya para eventos de noche con destellos elegantes y espalda al descubierto.',
   },
 
@@ -438,7 +417,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/top_moon.jpeg',
     images: ['/images/top_moon.jpeg', '/images/top_moon2.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Top de noche estructurado en satén lustrado con detalle lunar esculpido en el escote.',
   },
 
@@ -452,7 +430,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/short_bellagio_principal.jpeg',
     images: ['/images/short_bellagio_principal.jpeg', '/images/short_bellagio.jpeg'],
-    fallbackImage: prodPollera,
     description: 'Short sastrero de noche con pinzas pronunciadas, tiro alto y bolsillos discretos.',
   },
 
@@ -466,7 +443,6 @@ export const PRODUCTS: Product[] = [
     sizes: ['S', 'M', 'L'],
     image: '/images/basic_cotone_principal.jpeg',
     images: ['/images/basic_cotone_principal.jpeg', '/images/basic_cotone_2.jpeg'],
-    fallbackImage: prodRemera,
     description: 'Remera 100% puro algodón peinado, fresca y transpirable para uso diario.',
   },
 ];
