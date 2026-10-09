@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Instagram, Mail, ArrowUpRight, Check } from 'lucide-react';
+import { Instagram, Mail, ArrowUpRight, Check, MessageCircle } from 'lucide-react';
+import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY } from '../data/products';
 
 interface FooterProps {
   onOpenSizeGuide: () => void;
@@ -27,21 +28,20 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="border-t border-[#232328] bg-[#0c0c0e] text-[#a1a1aa] text-xs pt-16 pb-12 px-4 md:px-8">
-      <div className="max-w-[1440px] mx-auto space-y-12">
+    <footer className="border-t border-[#1f1f24] bg-[#0c0c0e] text-[#a1a1aa] text-xs pt-12 pb-10 px-4 md:px-8">
+      <div className="max-w-[1440px] mx-auto space-y-10">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Column 1: Brand & Manifesto */}
-          <div className="md:col-span-1 space-y-3">
+          {/* Column 1: Brand & Slogan */}
+          <div className="md:col-span-1 space-y-2.5">
             <h2 className="font-display font-extrabold text-3xl tracking-tight text-white uppercase">
               NERA
             </h2>
             <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#781428] font-semibold">
-              FAIT NOTABLE
+              FATTI NOTARE
             </div>
-            <p className="text-xs text-[#71717a] leading-relaxed pr-4">
-              Sastrería contemporánea y siluetas esenciales concebidas bajo estándares de confección
-              artesanal y longevidad textil.
+            <p className="text-xs text-[#71717a] leading-relaxed font-light pr-4">
+              Cada prenda fue elegida con dedicación para inspirarte y recordarte que el verdadero estilo nace de ser uno mismo.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenCambios}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Cambios & Devoluciones (30 días)
+                  Cambios & Devoluciones (10 días)
                 </button>
               </li>
               <li>
@@ -72,18 +72,18 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenInfo}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Showroom & Atelier Palermo
+                  Sobre NERA
                 </button>
               </li>
               <li>
                 <a
-                  href="https://wa.me/5491158249102"
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors inline-flex items-center gap-1"
+                  className="hover:text-white transition-colors inline-flex items-center gap-1.5 text-[#4ade80]"
                 >
-                  <span>Asesoría por WhatsApp</span>
-                  <ArrowUpRight className="w-3 h-3 text-[#781428]" />
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Contactar</span>
                 </a>
               </li>
             </ul>
@@ -92,25 +92,28 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Column 3: Redes & Contacto */}
           <div className="space-y-3">
             <div className="text-[11px] font-mono uppercase tracking-widest text-[#e4e4e7] font-semibold">
-              Comunidad
+              Contacto & Redes
             </div>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2.5 text-xs">
               <li>
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/nera.official.ar"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors inline-flex items-center gap-1.5"
+                  className="hover:text-white transition-colors inline-flex items-center gap-2"
                 >
-                  <Instagram className="w-3.5 h-3.5 text-[#9a1e36]" />
-                  <span>@nera.faitnotable</span>
+                  <Instagram className="w-3.5 h-3.5 text-[#e18092]" />
+                  <span>Nera.official.ar</span>
                 </a>
               </li>
               <li>
-                <span className="text-[#71717a]">Armenia 1640, Palermo Soho, CABA</span>
-              </li>
-              <li>
-                <span className="text-[#71717a]">contacto@nera-atelier.com</span>
+                <a
+                  href="mailto:neraastoree@gmail.com"
+                  className="hover:text-white transition-colors inline-flex items-center gap-2"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#e18092]" />
+                  <span>neraastoree@gmail.com</span>
+                </a>
               </li>
             </ul>
           </div>
@@ -118,10 +121,10 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Column 4: Newsletter */}
           <div className="space-y-3">
             <div className="text-[11px] font-mono uppercase tracking-widest text-[#e4e4e7] font-semibold">
-              Boletín Editorial
+              Novedades
             </div>
             <p className="text-xs text-[#71717a]">
-              Recibí acceso prioritario a nuevos lanzamientos y cápsulas limitadas.
+              Recibí avisos de nuevas prendas y ediciones limitadas.
             </p>
 
             <form onSubmit={handleSubscribe} className="flex gap-2">
@@ -142,23 +145,19 @@ export const Footer: React.FC<FooterProps> = ({
             </form>
             {subscribed && (
               <p className="text-[11px] text-[#4ade80] font-mono">
-                ✓ Te suscribiste correctamente a los lanzamientos NERA.
+                ✓ Te suscribiste correctamente a NERA.
               </p>
             )}
           </div>
         </div>
 
         {/* Bottom Legal bar */}
-        <div className="pt-8 border-t border-[#1d1d23] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#52525b]">
+        <div className="pt-6 border-t border-[#1d1d23] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#52525b]">
           <div>
-            © {new Date().getFullYear()} NERA — FAIT NOTABLE. Todos los derechos reservados.
+            © {new Date().getFullYear()} NERA — FATTI NOTARE.
           </div>
-          <div className="flex items-center gap-4">
-            <span>Industria Argentina</span>
-            <span>·</span>
-            <span>Sastrería Sustentable</span>
-            <span>·</span>
-            <span className="text-[#781428]">Edición Limitada</span>
+          <div className="flex items-center gap-3">
+            <span>Fatti notare, con gratitudine, da NERA</span>
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
         </div>
       </div>
 
-      {/* Stadium Arch Capsules Grid: Responsive for 3 Categories (INFERIOR, SUPERIOR, NOCHE) */}
+      {/* Stadium Arch Capsules Grid: Pure images only, without overlay text */}
       <div
         ref={scrollContainerRef}
         className="flex items-center gap-3 sm:gap-6 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory focus:outline-none"
@@ -89,33 +89,22 @@ export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
                   : 'hover:opacity-95'
               }`}
             >
-              {/* Background Image */}
+              {/* Pure Background Image */}
               <div className="absolute inset-0 bg-[#161619]">
                 <img
                   src={cat.image}
                   alt={cat.title}
-                  className="w-full h-full object-cover object-center filter grayscale contrast-110 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700 ease-out"
+                  className="w-full h-full object-cover object-center filter grayscale-[5%] contrast-105 group-hover:scale-105 transition-all duration-700 ease-out"
                   referrerPolicy="no-referrer"
                 />
               </div>
 
-              {/* Gradient Scrim */}
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 group-hover:from-black/95 transition-all duration-500" /> */}
-
-              {/* Category Typography */}
-              <div className="absolute inset-x-2 sm:inset-x-4 bottom-5 sm:bottom-8 flex flex-col items-center text-center">
-                <h3 className="font-display text-base sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wider text-white mb-0.5 sm:mb-1 drop-shadow-sm group-hover:tracking-[0.18em] transition-all duration-300">
-                  {cat.title}
-                </h3>
-
-                <p className="text-[10px] sm:text-xs text-[#d4d4d8] font-light max-w-[180px] line-clamp-1 mb-1 hidden xs:block">
-                  {cat.subtitle}
-                </p>
-
-                {isActive && (
-                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#781428] mt-0.5 sm:mt-1" />
-                )}
-              </div>
+              {/* Active Indicator Ring Dot */}
+              {isActive && (
+                <div className="absolute bottom-4 inset-x-0 flex justify-center">
+                  <span className="w-2 h-2 rounded-full bg-[#781428] shadow-md" />
+                </div>
+              )}
             </motion.button>
           );
         })}

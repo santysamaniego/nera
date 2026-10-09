@@ -7,8 +7,8 @@ import { WHATSAPP_NUMBER } from '../data/products';
 interface ProductCardProps {
   product: Product;
   onQuickView: (product: Product) => void;
-  isWishlisted: boolean;
-  onToggleWishlist: (product: Product) => void;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (product: Product) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -20,7 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     product.colors && product.colors.length > 0 ? product.colors[0].name : ''
   );
 
-  // Size selection state
+  // Size selection state (only active if product has sizes, e.g. jeans)
   const [selectedSize, setSelectedSize] = useState<string>(
     product.sizes && product.sizes.length > 0 ? product.sizes[0] : ''
   );
@@ -39,7 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     return product.images && product.images.length > 0 ? product.images : [product.image];
   }, [product, selectedColor]);
 
-  // Current image index for the carousel
+  // Current image index for manual navigation
   const [currentIdx, setCurrentIdx] = useState(0);
 
   // Reset index when color changes
@@ -47,17 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     setCurrentIdx(0);
   }, [selectedColor]);
 
-  // 4-second auto carousel if more than 1 image
-  useEffect(() => {
-    if (activeImages.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentIdx((prev) => (prev + 1) % activeImages.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [activeImages.length]);
-
+  // Manual navigation handlers (No automatic carousel)
   const handlePrevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentIdx((prev) => (prev - 1 + activeImages.length) % activeImages.length);
@@ -74,7 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     maximumFractionDigits: 0,
   }).format(product.price);
 
-  // WhatsApp link preparation
+  // WhatsApp link with number 11 3658-1397 (5491136581397)
   const whatsappMessage = encodeURIComponent(
     `Hola NERA! Quiero consultar por ${product.name} ($${product.price.toLocaleString('es-AR')})` +
       (selectedSize ? ` en talle ${selectedSize}` : '') +
@@ -94,7 +84,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       className="group relative flex flex-col bg-[#121215] rounded-2xl border border-white/[0.08] hover:border-white/[0.18] transition-all duration-300 overflow-hidden"
     >
-      {/* Product Image Container with 4s Carousel */}
+      {/* Product Image Container (Manual Navigation Only) */}
       <div
         onClick={() => onQuickView(product)}
         className="relative aspect-[3/4] w-full overflow-hidden bg-[#161619] cursor-pointer"
@@ -107,7 +97,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           referrerPolicy="no-referrer"
         />
 
-        {/* Minimal Hairline Navigation Arrows for Carousel */}
+        {/* Minimal Hairline Navigation Arrows (Manual click only) */}
         {activeImages.length > 1 && (
           <>
             <button
@@ -184,26 +174,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           )}
 
-          {/* Sizes Badges */}
-          <div className="mt-2 flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
-            <span className="text-[10px] text-[#71717a] uppercase font-mono mr-1 shrink-0">Talles:</span>
-            {product.sizes.map((sz) => (
-              <button
-                key={sz}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedSize(sz);
-                }}
-                className={`text-[10px] min-w-[22px] px-1.5 py-0.5 rounded-md border text-center transition-all cursor-pointer font-mono shrink-0 ${
-                  selectedSize === sz
-                    ? 'border-white/60 bg-white/10 text-white font-bold'
-                    : 'border-white/10 text-[#8e8e99] hover:border-white/30'
-                }`}
-              >
-                {sz}
-              </button>
-            ))}
-          </div>
+          {/* Sizes Badges ONLY for Jeans (products with sizes defined) */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mt-2 flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
+              <span className="text-[10px] text-[#71717a] uppercase font-mono mr-1 shrink-0">Talles:</span>
+              {product.sizes.map((sz) => (
+                <button
+                  key={sz}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedSize(sz);
+                  }}
+                  className={`text-[10px] min-w-[22px] px-1.5 py-0.5 rounded-md border text-center transition-all cursor-pointer font-mono shrink-0 ${
+                    selectedSize === sz
+                      ? 'border-white/60 bg-white/10 text-white font-bold'
+                      : 'border-white/10 text-[#8e8e99] hover:border-white/30'
+                  }`}
+                >
+                  {sz}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* WhatsApp Contact / Consult Button */}
@@ -215,7 +207,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           className="mt-1 w-full py-2 sm:py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-[#0b140e] text-[11px] sm:text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-sm hover:shadow-[#25D366]/20 cursor-pointer"
         >
           <MessageCircle className="w-3.5 h-3.5 fill-current" />
-          <span>Consultar por WhatsApp</span>
+          <span>Contactar</span>
         </a>
       </div>
     </motion.div>

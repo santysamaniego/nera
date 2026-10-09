@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, User } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { MainCategory } from '../types';
 
 interface NavbarProps {
@@ -7,12 +7,12 @@ interface NavbarProps {
   onOpenSizeGuide: () => void;
   onOpenInfo: () => void;
   onOpenCambios: () => void;
-  onOpenCart: () => void;
-  onOpenProfile: () => void;
-  cartCount: number;
-  wishlistCount: number;
-  activeCategory: MainCategory;
-  onSelectCategory: (category: MainCategory) => void;
+  onOpenCart?: () => void;
+  onOpenProfile?: () => void;
+  cartCount?: number;
+  wishlistCount?: number;
+  activeCategory?: MainCategory;
+  onSelectCategory?: (category: MainCategory) => void;
   onSelectNew: () => void;
 }
 
@@ -21,23 +21,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSizeGuide,
   onOpenInfo,
   onOpenCambios,
-  onOpenCart,
-  onOpenProfile,
-  cartCount,
-  wishlistCount,
   onSelectNew,
 }) => {
-  const tickerItems = [
-    'ENVÍOS SIN CARGO A TODO EL PAÍS SUPERANDO $120.000',
-    '3 Y 6 CUOTAS SIN INTERÉS',
-    '15% OFF ABONANDO CON TRANSFERENCIA BANCARIA',
-    'PRIMER CAMBIO GRATIS EN NUESTRO ATELIER O A DOMICILIO (30 DÍAS)',
-    'SHOWROOM PALERMO SOHO: MIÉRCOLES A SÁBADOS 14 A 20 HS',
-  ];
-
   return (
     <header className="sticky top-0 z-40 bg-[#0e0e10]/95 backdrop-blur-md border-b border-[#1f1f24] transition-all">
-
       {/* Main navigation row matching client sketch */}
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
         {/* Left: Search button */}

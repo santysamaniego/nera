@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { X, Ruler, MessageCircle, Truck, RefreshCw } from 'lucide-react';
+import { X, Ruler, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
-import { WHATSAPP_NUMBER } from '../data/products';
+import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY } from '../data/products';
 
 interface ProductDetailModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart?: (product: Product, size: string, color: string, quantity: number) => void;
   onOpenSizeGuide: () => void;
-  isWishlisted: boolean;
-  onToggleWishlist: (product: Product) => void;
+  onAddToCart?: (product: Product, size: string, color: string, quantity?: number) => void;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (product: Product) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -21,7 +21,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   if (!isOpen || !product) return null;
 
-  const [selectedSize, setSelectedSize] = useState<string>(product.sizes[0] || '');
+  const [selectedSize, setSelectedSize] = useState<string>(
+    product.sizes && product.sizes.length > 0 ? product.sizes[0] : ''
+  );
   const [selectedColor, setSelectedColor] = useState<string>(
     product.colors && product.colors.length > 0 ? product.colors[0].name : ''
   );
@@ -42,7 +44,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
   useEffect(() => {
     setActiveImageIdx(0);
-    setSelectedSize(product.sizes[0] || '');
+    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : '');
     if (product.colors && product.colors.length > 0) {
       setSelectedColor(product.colors[0].name);
     } else {
@@ -67,38 +69,101 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   );
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
 
+  const handlePrevImg = () => {
+    setActiveImageIdx((prev) => (prev - 1 + activeImages.length) % activeImages.length);
+  };
+
+  const handleNextImg = () => {
+    setActiveImageIdx((prev) => (prev + 1) % activeImages.length);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-2xl animate-fade-in">
-      <div className="relative w-full max-w-3xl bg-[#0c0c0f] border border-white/[0.08] rounded-[24px] sm:rounded-[32px] shadow-[0_25px_80px_rgba(0,0,0,0.85)] overflow-hidden max-h-[92vh] flex flex-col md:flex-row">
-        {/* Close Button */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-2xl animate-fade-in overflow-y-auto">
+      <div className="relative w-full max-w-lg bg-[#0c0c0f] border border-white/[0.08] rounded-[24px] sm:rounded-[32px] shadow-[0_30px_90px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col my-auto max-h-[96vh]">
+        {/* Floating Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          className="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white/80 hover:text-white flex items-center justify-center transition-all cursor-pointer"
           aria-label="Cerrar ventana"
         >
           <X className="w-4 h-4 stroke-[1.5]" />
         </button>
 
-        {/* Left Column: Image Gallery */}
-        <div className="md:w-1/2 bg-[#121215] relative flex flex-col justify-between overflow-hidden">
-          <div className="relative aspect-[3/4] w-full max-h-[380px] md:max-h-none overflow-hidden bg-[#161619]">
-            <img
-              src={finalImgSrc}
-              alt={product.name}
-              onError={() => setImgError((prev) => ({ ...prev, [currentImgSrc]: true }))}
-              className="w-full h-full object-cover object-center filter grayscale-[5%] contrast-105"
-              referrerPolicy="no-referrer"
-            />
+        {/* 1. DOMINANT MAIN IMAGE CONTAINER */}
+        <div className="relative w-full aspect-[3/4] max-h-[58vh] sm:max-h-[62vh] overflow-hidden bg-[#141417]">
+          <img
+            src={finalImgSrc}
+            alt={product.name}
+            onError={() => setImgError((prev) => ({ ...prev, [currentImgSrc]: true }))}
+            className="w-full h-full object-cover object-top sm:object-center filter grayscale-[4%] contrast-105"
+            referrerPolicy="no-referrer"
+          />
+
+          {/* Manual arrows if multiple images */}
+          {activeImages.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevImg}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 backdrop-blur-sm text-white flex items-center justify-center transition-all z-20 cursor-pointer"
+                aria-label="Imagen anterior"
+              >
+                <ChevronLeft className="w-4 h-4 stroke-[1.5]" />
+              </button>
+              <button
+                onClick={handleNextImg}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 backdrop-blur-sm text-white flex items-center justify-center transition-all z-20 cursor-pointer"
+                aria-label="Imagen siguiente"
+              >
+                <ChevronRight className="w-4 h-4 stroke-[1.5]" />
+              </button>
+
+              {/* Dots */}
+              <div className="absolute bottom-2.5 inset-x-0 flex items-center justify-center gap-1 z-20 pointer-events-none">
+                {activeImages.map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      idx === activeImageIdx ? 'w-4 bg-white' : 'w-1 bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Category Tag badge */}
+          <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] uppercase tracking-wider text-[#d4d4d8] font-mono pointer-events-none">
+            {product.category}
+          </div>
+        </div>
+
+        {/* 2. COMPACT FLOATING DETAILS SECTION BENEATH IMAGE */}
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-3 bg-[#0c0c0f] border-t border-white/[0.06]">
+          {/* Title and Price */}
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight font-display">
+              {product.name}
+            </h2>
+            <span className="text-sm sm:text-base font-semibold text-[#f4f4f5] tabular-nums font-mono shrink-0">
+              {formattedPrice}
+            </span>
           </div>
 
-          {/* Thumbnails if multiple images */}
+          {/* Description */}
+          {product.description && (
+            <p className="text-[11px] text-[#8e8e99] leading-relaxed font-light">
+              {product.description}
+            </p>
+          )}
+
+          {/* Multiple Image Thumbnails strip (compact) */}
           {activeImages.length > 1 && (
-            <div className="p-3 bg-[#0e0e12] border-t border-white/[0.06] flex items-center gap-2 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
               {activeImages.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImageIdx(i)}
-                  className={`w-12 h-14 rounded-lg overflow-hidden border transition-all cursor-pointer shrink-0 ${
+                  className={`w-9 h-11 rounded-md overflow-hidden border transition-all cursor-pointer shrink-0 ${
                     activeImageIdx === i ? 'border-[#781428] ring-1 ring-[#781428]' : 'border-white/10 opacity-60'
                   }`}
                 >
@@ -111,77 +176,39 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               ))}
             </div>
           )}
-        </div>
 
-        {/* Right Column: Details & WhatsApp Action */}
-        <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[85vh] bg-[#0c0c0f]">
-          <div className="space-y-4 sm:space-y-5">
-            {/* Header info */}
-            <div>
-              <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#71717a] mb-1">
-                NERA · {product.category} {product.subcategory ? `· ${product.subcategory}` : ''}
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug font-display">
-                {product.name}
-              </h2>
-              <div className="mt-2 font-mono text-lg sm:text-xl font-bold text-white tabular-nums">
-                {formattedPrice}
+          {/* Color Selector if applicable */}
+          {product.colors && product.colors.length > 0 && (
+            <div className="flex items-center gap-2 pt-0.5">
+              <span className="text-[10px] font-mono uppercase text-[#71717a]">Color:</span>
+              <div className="flex items-center gap-1.5">
+                {product.colors.map((c) => (
+                  <button
+                    key={c.name}
+                    onClick={() => setSelectedColor(c.name)}
+                    className={`text-[10px] px-2.5 py-0.5 rounded-full border transition-all cursor-pointer font-mono ${
+                      selectedColor === c.name
+                        ? 'border-[#781428] bg-[#781428]/30 text-white font-medium ring-1 ring-[#781428]'
+                        : 'border-white/10 text-[#a1a1aa] hover:border-white/30'
+                    }`}
+                  >
+                    {c.name}
+                  </button>
+                ))}
               </div>
             </div>
+          )}
 
-            {/* Description */}
-            {product.description && (
-              <p className="text-xs text-[#8e8e99] leading-relaxed font-light">
-                {product.description}
-              </p>
-            )}
-
-            {/* Color Selector */}
-            {product.colors && product.colors.length > 0 && (
-              <div>
-                <label className="block text-[11px] font-mono uppercase text-[#d4d4d8] mb-1.5">
-                  Color Seleccionado: <strong className="text-white">{selectedColor}</strong>
-                </label>
-                <div className="flex items-center gap-2">
-                  {product.colors.map((c) => (
-                    <button
-                      key={c.name}
-                      onClick={() => setSelectedColor(c.name)}
-                      className={`text-xs px-3 py-1 rounded-full border transition-all cursor-pointer font-mono ${
-                        selectedColor === c.name
-                          ? 'border-[#781428] bg-[#781428]/30 text-white font-medium ring-1 ring-[#781428]'
-                          : 'border-white/10 text-[#a1a1aa] hover:border-white/30'
-                      }`}
-                    >
-                      {c.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Size Selector */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[11px] font-mono uppercase text-[#d4d4d8]">
-                  Talle: <strong className="text-white">{selectedSize}</strong>
-                </label>
-                <button
-                  type="button"
-                  onClick={onOpenSizeGuide}
-                  className="flex items-center gap-1 text-[10px] text-[#a1a1aa] hover:text-white underline cursor-pointer"
-                >
-                  <Ruler className="w-3 h-3 text-[#781428]" />
-                  <span>Tabla de talles</span>
-                </button>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
+          {/* Sizes Selector ONLY for Jeans */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="flex items-center justify-between gap-2 pt-0.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono uppercase text-[#71717a]">Talle:</span>
                 {product.sizes.map((sz) => (
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(sz)}
-                    className={`min-w-[42px] h-9 px-3 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                    className={`min-w-[28px] h-6 px-2 rounded-md text-[10px] font-mono transition-all cursor-pointer ${
                       selectedSize === sz
                         ? 'bg-white text-black font-bold'
                         : 'bg-white/[0.04] text-[#d4d4d8] hover:text-white border border-white/[0.08]'
@@ -191,35 +218,29 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </button>
                 ))}
               </div>
-            </div>
 
-            {/* WhatsApp CTA Action */}
-            <div className="pt-2">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-[#0b140e] text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-[#25D366]/20 cursor-pointer"
+              <button
+                type="button"
+                onClick={onOpenSizeGuide}
+                className="flex items-center gap-1 text-[10px] text-[#a1a1aa] hover:text-white underline cursor-pointer"
               >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Consultar por WhatsApp</span>
-              </a>
-              <p className="mt-2 text-[10px] text-center text-[#71717a] font-mono">
-                Atención directa NERA Atelier · 11 3658-1397
-              </p>
+                <Ruler className="w-3 h-3 text-[#781428]" />
+                <span>Guía</span>
+              </button>
             </div>
+          )}
 
-            {/* Trust markers */}
-            <div className="border-t border-white/[0.06] pt-4 grid grid-cols-2 gap-3 text-[10px] text-[#71717a]">
-              <div className="flex items-center gap-2">
-                <Truck className="w-3.5 h-3.5 text-[#781428] shrink-0" />
-                <span>Envíos a todo el país</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <RefreshCw className="w-3.5 h-3.5 text-[#781428] shrink-0" />
-                <span>Primer cambio sin cargo</span>
-              </div>
-            </div>
+          {/* WhatsApp Direct Consultation CTA Button */}
+          <div className="pt-2">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-[#0b140e] text-xs font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4 fill-current" />
+              <span>Contactar</span>
+            </a>
           </div>
         </div>
       </div>

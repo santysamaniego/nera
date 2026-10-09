@@ -279,12 +279,12 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose 
           <div className="border-t border-white/[0.06] pt-4 text-[11px] text-[#71717a] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <span>¿Precisás ayuda personalizada con las medidas?</span>
             <a
-              href="https://wa.me/5491158249102"
+              href="https://wa.me/5491136581397"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#e18092] hover:text-white transition-colors font-medium flex items-center gap-1"
             >
-              <span>Hablar con una estilista por WhatsApp</span>
+              <span>Contactar</span>
               <ChevronRight className="w-3 h-3" />
             </a>
           </div>
